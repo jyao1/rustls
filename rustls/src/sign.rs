@@ -106,7 +106,7 @@ impl CertifiedKey {
     /// *server* attempting to detect accidental misconfiguration.
     pub fn cross_check_end_entity_cert(
         &self,
-        name: Option<webpki::DNSNameRef>,
+        name: Option<webpki::DnsNameRef>,
     ) -> Result<(), TLSError> {
         // Always reject an empty certificate chain.
         let end_entity_cert = self.end_entity_cert().map_err(|()| {

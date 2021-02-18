@@ -97,7 +97,7 @@ pub fn can_resume(
 
 // Require an exact match for the purpose of comparing SNI DNS Names from two
 // client hellos, even though a case-insensitive comparison might also be OK.
-fn same_dns_name_or_both_none(a: Option<&webpki::DNSName>, b: Option<&webpki::DNSName>) -> bool {
+fn same_dns_name_or_both_none(a: Option<&webpki::DnsName>, b: Option<&webpki::DnsName>) -> bool {
     match (a, b) {
         (Some(a), Some(b)) => {
             let a: &str = a.as_ref().into();
@@ -125,7 +125,7 @@ pub fn check_aligned_handshake(sess: &mut ServerSessionImpl) -> Result<(), TLSEr
     }
 }
 
-pub fn save_sni(sess: &mut ServerSessionImpl, sni: Option<webpki::DNSName>) {
+pub fn save_sni(sess: &mut ServerSessionImpl, sni: Option<webpki::DnsName>) {
     if let Some(sni) = sni {
         // Save the SNI into the session.
         sess.set_sni(sni);
@@ -574,7 +574,7 @@ impl ExpectClientHello {
         mut self,
         sess: &mut ServerSessionImpl,
         client_hello: &ClientHelloPayload,
-        sni: Option<&webpki::DNSName>,
+        sni: Option<&webpki::DnsName>,
         id: &SessionID,
         resumedata: persist::ServerSessionValue,
     ) -> NextStateOrError {
@@ -678,7 +678,7 @@ impl State for ExpectClientHello {
         // send an Illegal Parameter alert instead of the Internal Error alert
         // (or whatever) that we'd send if this were checked later or in a
         // different way.
-        let sni: Option<webpki::DNSName> = match client_hello.get_sni_extension() {
+        let sni: Option<webpki::DnsName> = match client_hello.get_sni_extension() {
             Some(sni) => {
                 if sni.has_duplicate_names_for_type() {
                     return Err(decode_error(
@@ -731,7 +731,7 @@ impl State for ExpectClientHello {
         let mut certkey = {
             let sni_ref = sni
                 .as_ref()
-                .map(webpki::DNSName::as_ref);
+                .map(webpki::DnsName::as_ref);
             trace!("sni {:?}", sni_ref);
             trace!("sig schemes {:?}", sigschemes_ext);
             trace!("alpn protocols {:?}", alpn_protocols);

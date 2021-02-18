@@ -71,7 +71,7 @@ pub fn validate_server_hello(
     Ok(())
 }
 
-fn find_kx_hint(sess: &mut ClientSessionImpl, dns_name: webpki::DNSNameRef) -> Option<NamedGroup> {
+fn find_kx_hint(sess: &mut ClientSessionImpl, dns_name: webpki::DnsNameRef) -> Option<NamedGroup> {
     let key = persist::ClientSessionKey::hint_for_dns_name(dns_name);
     let key_buf = key.get_encoding();
 
@@ -82,7 +82,7 @@ fn find_kx_hint(sess: &mut ClientSessionImpl, dns_name: webpki::DNSNameRef) -> O
     maybe_value.and_then(|enc| NamedGroup::read_bytes(&enc))
 }
 
-fn save_kx_hint(sess: &mut ClientSessionImpl, dns_name: webpki::DNSNameRef, group: NamedGroup) {
+fn save_kx_hint(sess: &mut ClientSessionImpl, dns_name: webpki::DnsNameRef, group: NamedGroup) {
     let key = persist::ClientSessionKey::hint_for_dns_name(dns_name);
 
     sess.config

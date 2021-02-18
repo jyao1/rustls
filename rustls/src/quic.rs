@@ -332,7 +332,7 @@ pub trait ClientQuicExt {
     /// TLS-encoded transport parameters to send.
     fn new_quic(
         config: &Arc<ClientConfig>,
-        hostname: webpki::DNSNameRef,
+        hostname: webpki::DnsNameRef,
         params: Vec<u8>,
     ) -> ClientSession {
         assert!(

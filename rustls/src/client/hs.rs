@@ -75,7 +75,7 @@ pub fn check_aligned_handshake(sess: &mut ClientSessionImpl) -> Result<(), TLSEr
 
 fn find_session(
     sess: &mut ClientSessionImpl,
-    dns_name: webpki::DNSNameRef,
+    dns_name: webpki::DnsNameRef,
 ) -> Option<persist::ClientSessionValue> {
     let key = persist::ClientSessionKey::session_for_dns_name(dns_name);
     let key_buf = key.get_encoding();
@@ -130,7 +130,7 @@ struct InitialState {
 }
 
 impl InitialState {
-    fn new(host_name: webpki::DNSName, extra_exts: Vec<ClientExtension>) -> InitialState {
+    fn new(host_name: webpki::DnsName, extra_exts: Vec<ClientExtension>) -> InitialState {
         InitialState {
             handshake: HandshakeDetails::new(host_name),
             extra_exts,
@@ -154,7 +154,7 @@ impl InitialState {
 
 pub fn start_handshake(
     sess: &mut ClientSessionImpl,
-    host_name: webpki::DNSName,
+    host_name: webpki::DnsName,
     extra_exts: Vec<ClientExtension>,
 ) -> NextState {
     InitialState::new(host_name, extra_exts).emit_initial_client_hello(sess)

@@ -415,7 +415,7 @@ impl ClientSessionImpl {
         }
     }
 
-    pub fn start_handshake(&mut self, hostname: webpki::DNSName, extra_exts: Vec<ClientExtension>) {
+    pub fn start_handshake(&mut self, hostname: webpki::DnsName, extra_exts: Vec<ClientExtension>) {
         self.state = Some(hs::start_handshake(self, hostname, extra_exts));
     }
 
@@ -661,7 +661,7 @@ impl ClientSession {
     /// Make a new ClientSession.  `config` controls how
     /// we behave in the TLS protocol, `hostname` is the
     /// hostname of who we want to talk to.
-    pub fn new(config: &Arc<ClientConfig>, hostname: webpki::DNSNameRef) -> ClientSession {
+    pub fn new(config: &Arc<ClientConfig>, hostname: webpki::DnsNameRef) -> ClientSession {
         let mut imp = ClientSessionImpl::new(config);
         imp.start_handshake(hostname.into(), vec![]);
         ClientSession { imp }
