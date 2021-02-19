@@ -215,15 +215,15 @@
 
 #[cfg(feature = "no_std")]
 #[macro_use]
-extern crate fake_std as std;
+extern crate internal_std as std;
 
-// Export fake_std for no_std use
+// Export internal_std for no_std use
 #[cfg(feature = "no_std")]
-pub mod fake_std {
+pub mod internal_std {
     pub use std::*;
 }
 
-// prelude fake_std for calling Vec, String, Mutex, HashMap, etc.
+// prelude internal_std for calling Vec, String, Mutex, HashMap, etc.
 #[cfg(feature = "no_std")]
 #[prelude_import]
 #[macro_use]

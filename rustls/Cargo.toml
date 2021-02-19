@@ -17,8 +17,8 @@ ring = { path="../../ring" }
 sct = { path="../../sct"}
 webpki =  {path="../../webpki"}
 
-[dependencies.fake_std]
-path = "./fake_std"
+[dependencies.internal_std]
+path = "./internal_std"
 optional = true
 
 [features]
@@ -27,7 +27,7 @@ logging = ["log"]
 dangerous_configuration = []
 quic = []
 alloc = ["ring/alloc", "webpki/alloc"]
-no_std = ["fake_std", "alloc"]
+no_std = ["internal_std", "alloc"]
 std = ["webpki/std"]
 
 [dev-dependencies]
