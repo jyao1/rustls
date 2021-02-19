@@ -217,7 +217,7 @@
 #[macro_use]
 extern crate internal_std as std;
 
-// Export internal_std for no_std use
+/// internal std export io::Read and io::Write trait for no_std case
 #[cfg(feature = "no_std")]
 pub mod internal_std {
     pub use std::*;
