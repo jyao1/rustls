@@ -191,7 +191,9 @@
 //!
 
 // Require docs for public APIs, deny unsafe code, etc.
-#![forbid(unsafe_code, unused_must_use, unstable_features)]
+#![forbid(unsafe_code, unused_must_use)]
+// If no_std feature doesn't enabled, forbit unstable_features
+#![cfg_attr(not(feature = "no_std"), forbid(unstable_features))]
 #![deny(
     trivial_casts,
     trivial_numeric_casts,
@@ -206,6 +208,26 @@
 #![cfg_attr(feature = "cargo-clippy", allow(clippy::ptr_arg))]
 // Enable documentation for all features on docs.rs
 #![cfg_attr(docsrs, feature(doc_cfg))]
+
+// Enable no_std support, and no_std support need prelude_import feature.
+#![cfg_attr(feature = "no_std", no_std)]
+#![cfg_attr(feature = "no_std", feature(prelude_import))]
+
+#[cfg(feature = "no_std")]
+#[macro_use]
+extern crate fake_std as std;
+
+// Export fake_std for no_std use
+#[cfg(feature = "no_std")]
+pub mod fake_std {
+    pub use std::*;
+}
+
+// prelude fake_std for calling Vec, String, Mutex, HashMap, etc.
+#[cfg(feature = "no_std")]
+#[prelude_import]
+#[macro_use]
+use std::prelude::*;
 
 // log for logging (optional).
 #[cfg(feature = "logging")]
@@ -243,7 +265,15 @@ mod check;
 mod bs_debug;
 mod client;
 mod key;
+
+// Use no_std keylog instead of keylog
+#[cfg(not(feature = "no_std"))]
 mod keylog;
+#[cfg(feature = "no_std")]
+mod keylog_no_std;
+#[cfg(feature = "no_std")]
+use keylog_no_std as keylog;
+
 mod server;
 mod suites;
 mod ticketer;

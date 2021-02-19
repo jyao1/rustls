@@ -280,6 +280,10 @@ impl ServerCertVerifier for WebPKIVerifier {
         now: SystemTime,
     ) -> Result<ServerCertVerified, TLSError> {
         let (cert, chain, trustroots) = prepare(end_entity, intermediates, roots)?;
+
+        #[cfg(feature = "no_std")]
+        let now = webpki::Time::from_seconds_since_unix_epoch(now.as_secs());
+        #[cfg(not(feature = "no_std"))]
         let now = webpki::Time::try_from(now).map_err(|_| TLSError::FailedToGetCurrentTime)?;
 
         let cert = cert
@@ -387,7 +391,12 @@ impl ClientCertVerifier for AllowAnyAuthenticatedClient {
         now: SystemTime,
     ) -> Result<ClientCertVerified, TLSError> {
         let (cert, chain, trustroots) = prepare(end_entity, intermediates, &self.roots)?;
+
+        #[cfg(feature = "no_std")]
+        let now = webpki::Time::from_seconds_since_unix_epoch(now.as_secs());
+        #[cfg(not(feature = "no_std"))]
         let now = webpki::Time::try_from(now).map_err(|_| TLSError::FailedToGetCurrentTime)?;
+
         cert.verify_is_valid_tls_client_cert(
             SUPPORTED_SIG_ALGS,
             &webpki::TLSClientTrustAnchors(&trustroots),
