@@ -214,11 +214,14 @@ impl Ticketer {
     }
 }
 
-#[test]
-fn basic_pairwise_test() {
-    let t = Ticketer::new();
-    assert_eq!(true, t.enabled());
-    let cipher = t.encrypt(b"hello world").unwrap();
-    let plain = t.decrypt(&cipher).unwrap();
-    assert_eq!(plain, b"hello world");
+#[cfg(test)]
+mod test {
+    #[test]
+    fn basic_pairwise_test() {
+        let t = Ticketer::new();
+        assert_eq!(true, t.enabled());
+        let cipher = t.encrypt(b"hello world").unwrap();
+        let plain = t.decrypt(&cipher).unwrap();
+        assert_eq!(plain, b"hello world");
+    }
 }
