@@ -20,7 +20,7 @@ fn main() {
         .root_store
         .add_server_trust_anchors(&webpki_roots::TLS_SERVER_ROOTS);
 
-    let dns_name = webpki::DNSNameRef::try_from_ascii_str("google.com").unwrap();
+    let dns_name = webpki::DnsNameRef::try_from_ascii_str("google.com").unwrap();
     let mut sess = rustls::ClientSession::new(&Arc::new(config), dns_name);
     let mut sock = TcpStream::connect("google.com:443").unwrap();
     let mut tls = rustls::Stream::new(&mut sess, &mut sock);

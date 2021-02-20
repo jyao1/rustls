@@ -178,13 +178,13 @@ impl rustls::ClientCertVerifier for DummyClientAuth {
         true
     }
 
-    fn client_auth_mandatory(&self, _sni: Option<&webpki::DNSName>) -> Option<bool> {
+    fn client_auth_mandatory(&self, _sni: Option<&webpki::DnsName>) -> Option<bool> {
         Some(self.mandatory)
     }
 
     fn client_auth_root_subjects(
         &self,
-        _sni: Option<&webpki::DNSName>,
+        _sni: Option<&webpki::DnsName>,
     ) -> Option<rustls::DistinguishedNames> {
         Some(rustls::DistinguishedNames::new())
     }
@@ -193,7 +193,7 @@ impl rustls::ClientCertVerifier for DummyClientAuth {
         &self,
         _end_entity: &rustls::Certificate,
         _intermediates: &[rustls::Certificate],
-        _sni: Option<&webpki::DNSName>,
+        _sni: Option<&webpki::DnsName>,
         _now: SystemTime,
     ) -> Result<rustls::ClientCertVerified, rustls::TLSError> {
         Ok(rustls::ClientCertVerified::assertion())
@@ -208,7 +208,7 @@ impl rustls::ServerCertVerifier for DummyServerAuth {
         _end_entity: &rustls::Certificate,
         _certs: &[rustls::Certificate],
         _roots: &rustls::RootCertStore,
-        _hostname: webpki::DNSNameRef<'_>,
+        _hostname: webpki::DnsNameRef<'_>,
         _ocsp: &[u8],
         _now: SystemTime,
     ) -> Result<rustls::ServerCertVerified, rustls::TLSError> {
@@ -1012,7 +1012,7 @@ fn main() {
             };
             ClientOrServer::Server(s)
         } else {
-            let dns_name = webpki::DNSNameRef::try_from_ascii_str(&opts.host_name).unwrap();
+            let dns_name = webpki::DnsNameRef::try_from_ascii_str(&opts.host_name).unwrap();
             let c = if opts.quic_transport_params.is_empty() {
                 rustls::ClientSession::new(ccfg.as_ref().unwrap(), dns_name)
             } else {

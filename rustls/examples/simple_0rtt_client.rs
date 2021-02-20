@@ -9,7 +9,7 @@ use webpki;
 use webpki_roots;
 
 fn start_session(config: &Arc<rustls::ClientConfig>, domain_name: &str) {
-    let dns_name = webpki::DNSNameRef::try_from_ascii_str(domain_name).unwrap();
+    let dns_name = webpki::DnsNameRef::try_from_ascii_str(domain_name).unwrap();
     let mut sess = rustls::ClientSession::new(config, dns_name);
     let mut sock = TcpStream::connect(format!("{}:443", domain_name)).unwrap();
     sock.set_nodelay(true).unwrap();
