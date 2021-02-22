@@ -27,6 +27,8 @@ pub fn wrap_in_sequence(bytes: &mut Vec<u8>) {
 
 #[cfg(test)]
 mod test {
+
+    use super::wrap_in_sequence;
     #[test]
     fn test_empty() {
         let mut val = Vec::new();

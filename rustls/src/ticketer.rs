@@ -216,6 +216,7 @@ impl Ticketer {
 
 #[cfg(test)]
 mod test {
+    use super::Ticketer;
     #[test]
     fn basic_pairwise_test() {
         let t = Ticketer::new();
