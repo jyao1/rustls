@@ -17,18 +17,18 @@ ring = { path="../../ring" }
 sct = { path="../../sct"}
 webpki =  {path="../../webpki"}
 
-[dependencies.internal_std]
-path = "./internal_std"
-optional = true
+[target.'cfg(target_os = "uefi")'.dependencies]
+uefi_std_stub = {path = "../../uefi-std-stub"}
+
+# [target.'cfg(target_os = "uefi")'.features]
+# alloc = ["ring/alloc", "webpki/alloc"]
 
 [features]
-default = ["logging", "std"]
+default = ["logging", "webpki/std"]
 logging = ["log"]
 dangerous_configuration = []
 quic = []
 alloc = ["ring/alloc", "webpki/alloc"]
-no_std = ["internal_std", "alloc"]
-std = ["webpki/std"]
 
 [dev-dependencies]
 env_logger = "0.8.2"

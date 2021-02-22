@@ -193,7 +193,7 @@
 // Require docs for public APIs, deny unsafe code, etc.
 #![forbid(unsafe_code, unused_must_use)]
 // If no_std feature doesn't enabled, forbit unstable_features
-#![cfg_attr(not(feature = "no_std"), forbid(unstable_features))]
+#![cfg_attr(not(target_os = "uefi"), forbid(unstable_features))]
 #![deny(
     trivial_casts,
     trivial_numeric_casts,
@@ -210,21 +210,21 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
 // Enable no_std support, and no_std support need prelude_import feature.
-#![cfg_attr(feature = "no_std", no_std)]
-#![cfg_attr(feature = "no_std", feature(prelude_import))]
+#![cfg_attr(target_os = "uefi", no_std)]
+#![cfg_attr(target_os = "uefi", feature(prelude_import))]
 
-#[cfg(feature = "no_std")]
+#[cfg(target_os = "uefi")]
 #[macro_use]
-extern crate internal_std as std;
+extern crate uefi_std_stub as std;
 
 /// internal std export io::Read and io::Write trait for no_std case
-#[cfg(feature = "no_std")]
-pub mod internal_std {
+#[cfg(target_os = "uefi")]
+pub mod uefi_std_stub {
     pub use std::*;
 }
 
 // prelude internal_std for calling Vec, String, Mutex, HashMap, etc.
-#[cfg(feature = "no_std")]
+#[cfg(target_os = "uefi")]
 #[prelude_import]
 #[macro_use]
 use std::prelude::*;
@@ -267,12 +267,12 @@ mod client;
 mod key;
 
 // Use no_std keylog instead of keylog
-#[cfg(not(feature = "no_std"))]
+#[cfg(not(target_os = "uefi"))]
 mod keylog;
-#[cfg(feature = "no_std")]
-mod keylog_no_std;
-#[cfg(feature = "no_std")]
-use keylog_no_std as keylog;
+#[cfg(target_os = "uefi")]
+mod keylog_uefi;
+#[cfg(target_os = "uefi")]
+use keylog_uefi as keylog;
 
 mod server;
 mod suites;
