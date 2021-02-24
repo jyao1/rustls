@@ -1,6 +1,7 @@
 use crate::error::TLSError;
 use crate::key;
 use crate::msgs::enums::{SignatureAlgorithm, SignatureScheme};
+use std::convert::TryFrom;
 
 use ring::{
     self,
@@ -115,7 +116,7 @@ impl CertifiedKey {
 
         // Reject syntactically-invalid end-entity certificates.
         let end_entity_cert =
-            webpki::EndEntityCert::from(end_entity_cert.as_ref()).map_err(|_| {
+            webpki::EndEntityCert::try_from(end_entity_cert.as_ref()).map_err(|_| {
                 TLSError::General(
                     "End-entity certificate in certificate \
                                   chain is syntactically invalid"

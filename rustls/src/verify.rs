@@ -3,6 +3,7 @@ use std;
 use std::sync::Arc;
 use std::time::SystemTime;
 use webpki;
+use std::convert::TryFrom;
 
 use crate::anchors::OwnedTrustAnchor;
 use crate::anchors::{DistinguishedNames, RootCertStore};
@@ -339,7 +340,7 @@ fn prepare<'a, 'b>(
     roots: &'b RootCertStore,
 ) -> Result<CertChainAndRoots<'a, 'b>, TLSError> {
     // EE cert must appear first.
-    let cert = webpki::EndEntityCert::from(&end_entity.0).map_err(TLSError::WebPKIError)?;
+    let cert = webpki::EndEntityCert::try_from(end_entity.0.as_slice()).map_err(TLSError::WebPKIError)?;
 
     let intermediates: Vec<&'a [u8]> = intermediates.iter().map(|cert| cert.0.as_ref()).collect();
 
@@ -552,7 +553,7 @@ fn verify_signed_struct(
     dss: &DigitallySignedStruct,
 ) -> Result<HandshakeSignatureValid, TLSError> {
     let possible_algs = convert_scheme(dss.scheme)?;
-    let cert = webpki::EndEntityCert::from(&cert.0).map_err(TLSError::WebPKIError)?;
+    let cert = webpki::EndEntityCert::try_from(cert.0.as_slice()).map_err(TLSError::WebPKIError)?;
 
     verify_sig_using_any_alg(&cert, possible_algs, message, &dss.sig.0)
         .map_err(TLSError::WebPKIError)
@@ -604,7 +605,7 @@ fn verify_tls13(
     let alg = convert_alg_tls13(dss.scheme)?;
 
 
-    let cert = webpki::EndEntityCert::from(&cert.0).map_err(TLSError::WebPKIError)?;
+    let cert = webpki::EndEntityCert::try_from(cert.0.as_slice()).map_err(TLSError::WebPKIError)?;
 
     cert.verify_signature(alg, &msg, &dss.sig.0)
         .map_err(TLSError::WebPKIError)
