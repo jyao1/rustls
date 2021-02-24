@@ -13,15 +13,12 @@ autobenches = false
 
 [dependencies]
 log = { version = "0.4.4", optional = true}
-ring = { path="../../ring" }
-sct = { path="../../sct"}
-webpki =  {path="../../webpki"}
+ring = { git = "https://github.com/jyao1/ring", branch="uefi_support", default-features = false }
+sct = { git = "https://github.com/jyao1/sct.rs.git", branch="uefi_support" }
+webpki =  {git = "https://github.com/jyao1/webpki.git", branch="uefi_support"}
 
 [target.'cfg(target_os = "uefi")'.dependencies]
-uefi_std_stub = {path = "../../uefi-std-stub"}
-
-# [target.'cfg(target_os = "uefi")'.features]
-# alloc = ["ring/alloc", "webpki/alloc"]
+uefi_std_stub = { git = "https://github.com/jyao1/rust-uefi-std-stub.git", branch = "master"}
 
 [features]
 default = ["logging", "webpki/std"]
@@ -33,7 +30,7 @@ alloc = ["ring/alloc", "webpki/alloc"]
 [dev-dependencies]
 env_logger = "0.8.2"
 log = "0.4.4"
-webpki-roots = { path="../../webpki-roots"}
+webpki-roots = {git = "https://github.com/jyao1/webpki-roots.git", branch="uefi_support"}
 criterion = "0.3.0"
 rustls-pemfile = "0.2.0"
 base64 = "0.13.0"
