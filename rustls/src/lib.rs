@@ -226,6 +226,8 @@ pub mod uefi_std_stub {
 // prelude internal_std for calling Vec, String, Mutex, HashMap, etc.
 #[cfg(target_os = "uefi")]
 #[prelude_import]
+#[allow(unused_imports)]
+#[allow(unused_attributes)]
 #[macro_use]
 use std::prelude::*;
 

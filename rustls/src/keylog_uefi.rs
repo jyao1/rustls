@@ -1,6 +1,6 @@
 // use std::env;
 // use std::fs::{File, OpenOptions};
-use crate::std::io;
+#[allow(unused_imports)]
 use crate::std::io::Write;
 // use std::path::Path;
 
@@ -83,7 +83,7 @@ impl KeyLogFile {
 }
 
 impl KeyLog for KeyLogFile {
-    fn log(&self, label: &str, client_random: &[u8], secret: &[u8]) {
+    fn log(&self, _label: &str, _client_random: &[u8], _secret: &[u8]) {
     }
 }
 
