@@ -310,6 +310,7 @@ pub use crate::suites::{BulkAlgorithm, SupportedCipherSuite, ALL_CIPHERSUITES};
 pub use crate::ticketer::Ticketer;
 pub use crate::verify::{
     AllowAnyAnonymousOrAuthenticatedClient, AllowAnyAuthenticatedClient, NoClientAuth,
+    ServerCertVerifier, ClientCertVerifier, ServerCertVerified, ClientCertVerified
 };
 
 /// All defined ciphersuites appear in this module.

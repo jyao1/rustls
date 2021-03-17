@@ -247,6 +247,14 @@ impl ClientConfig {
     pub fn dangerous(&mut self) -> danger::DangerousClientConfig {
         danger::DangerousClientConfig { cfg: self }
     }
+
+    /// Overrides the default `ServerCertVerifier` with something else.
+    pub fn set_server_certificate_verifier(
+        &mut self,
+        verifier: Arc<dyn verify::ServerCertVerifier>,
+    ) {
+        self.verifier = verifier;
+    }
 }
 
 /// Container for unsafe APIs
